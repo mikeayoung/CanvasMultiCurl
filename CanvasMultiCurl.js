@@ -297,8 +297,13 @@ class CanvasMultiCurl {
     }
 
     //get submissions
-    async getSubmissions(courseid, assignmentids, students = false) {
-        const assignmentList = assignmentids.map(id => `assignment_ids[]=${id}`).join('&');
+    async getSubmissions(courseid, assignmentids, students = false, workflow_state = '') {
+        let assignmentList = assignmentids.map(id => `assignment_ids[]=${id}`).join('&');
+
+        if(workflow_state)
+        {
+          assignmentList += '&workflow_state=' + workflow_state;
+        }
 
         if (!students) {
             return this.getList(`courses/${courseid}/students/submissions?${assignmentList}`);
