@@ -16,6 +16,7 @@ Built in the thick of many real-world Canvas tasks. Still very much a work in pr
 The `getList` function allows you to fetch paginated lists of items from Canvas, such as courses, assignments, or students.
 
 #### Example: Fetch all courses
+```j
 const CanvasMultiCurl = require('./CanvasMultiCurl');
 const canvas = new CanvasMultiCurl('YOUR_CANVAS_ACCESS_TOKEN', 'https://canvas.your-instance.com');
 
@@ -28,8 +29,10 @@ const canvas = new CanvasMultiCurl('YOUR_CANVAS_ACCESS_TOKEN', 'https://canvas.y
     console.error('Error fetching courses:', error);
   }
 })();
+```
 
 #### Example: Fetch all assignments for a specific course
+```j
 const courseId = 12345; // Replace with your course ID
 (async () => {
   try {
@@ -39,6 +42,7 @@ const courseId = 12345; // Replace with your course ID
     console.error('Error fetching assignments:', error);
   }
 })();
+```
 
 ---
 
@@ -46,6 +50,7 @@ const courseId = 12345; // Replace with your course ID
 The `request` function is a flexible way to make any kind of API request (GET, POST, PUT, DELETE). You can use it for actions such as updating, creating, or deleting items in Canvas.
 
 #### Example: Updating an Assignment
+```j
 const courseId = 12345;
 const assignmentId = 67890;
 const updatedData = {
@@ -63,6 +68,7 @@ const updatedData = {
     console.error('Error updating assignment:', error);
   }
 })();
+```
 
 ---
 
@@ -70,6 +76,7 @@ const updatedData = {
 The `getAllResultsFromArray` method allows you to make multiple requests in parallel, which is useful for fetching large datasets more efficiently.
 
 #### Example: Fetch assignments for multiple courses
+```j
 const courseIds = [12345, 67890, 11223]; // Replace with actual course IDs
 
 (async () => {
@@ -80,6 +87,7 @@ const courseIds = [12345, 67890, 11223]; // Replace with actual course IDs
     console.error('Error fetching assignments for multiple courses:', error);
   }
 })();
+```
 
 ---
 
@@ -87,6 +95,7 @@ const courseIds = [12345, 67890, 11223]; // Replace with actual course IDs
 This method simplifies fetching student submissions for assignments within a course, with optional filters for students and submission states.
 
 #### Example: Get submissions for specific assignments in a course
+```j
 const courseId = 12345;
 const assignmentIds = [56789, 67890]; // Replace with assignment IDs
 const studentIds = [13579, 24680]; // Optional: Specific student IDs
@@ -99,6 +108,7 @@ const studentIds = [13579, 24680]; // Optional: Specific student IDs
     console.error('Error fetching submissions:', error);
   }
 })();
+```
 
 ---
 
@@ -106,6 +116,7 @@ const studentIds = [13579, 24680]; // Optional: Specific student IDs
 This method allows you to send different types of requests at the same time, which is useful for reducing the time spent waiting on multiple unrelated API calls.
 
 #### Example: Fetch course details, assignments, and users concurrently
+```j
 const courseId = 12345;
 
 const requestConfigs = [
@@ -124,3 +135,4 @@ const requestConfigs = [
     console.error('Error during concurrent requests:', error);
   }
 })();
+```
