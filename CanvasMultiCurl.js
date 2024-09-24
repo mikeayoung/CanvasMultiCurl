@@ -223,6 +223,8 @@ class CanvasMultiCurl {
                                 totalPages = page - 1;
                                 lastPageKnown = true;
                             } else {
+                                queryParams = new URLSearchParams(nextPageUrl.split('?')[1]);
+                                nextPage = queryParams.get('page');
                                 if (nextPage.includes('bookmark'))
                                 {
                                   //ugh it's a bookmark, we must go step by step
