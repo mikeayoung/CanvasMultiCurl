@@ -5,6 +5,6 @@ Built in the thick of many real-world Canvas tasks. Still very much a work in pr
 
 Notes:
 
-1) Handles bookmarks sequentially. Speculative concurrency is hard with bookmarks on purpose because Canvas doesn't want you hogging the API, which is fair. If you want to dive in, you might start with [this Canvas post](https://community.canvaslms.com/t5/Canvas-Developers-Group/Submissions-API-not-returning-all-submissions/m-p/51725), where James explains that bookmarks are Base64 JSON strings, and in theory if you know how your data results are being sorted, you could do speculative concurrency with bookmarks.
+1) Handles bookmarks sequentially. Speculative concurrency is hard with bookmarks on purpose because Canvas doesn't want you hogging the API, which is fair. If you want to dive in, you might start with [this Canvas Community post](https://community.canvaslms.com/t5/Canvas-Developers-Group/Submissions-API-not-returning-all-submissions/m-p/51725), where James explains that bookmarks are Base64 JSON strings, and in theory if you know how your data results are being sorted, you could do speculative concurrency with bookmarks.
 2) getList if you need a list from one endpoint; getAllResultsFromArray if you need something like all the assignments in a list of courses (be careful about memory limits and all that if you're getting big objects like submissions)
 3) getSubmissions is really the only "helper" function because I found myself getting submissions so often. But you could go to town with other levels of abstraction if you want!
