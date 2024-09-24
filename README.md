@@ -137,9 +137,12 @@ This method allows you to send different types of requests at the same time, whi
 const courseId = 12345;
 
 const requestConfigs = [
-  canvas.createRequestConfig(`courses/${courseId}`, 'GET'),                 // Fetch course details
-  canvas.createRequestConfig(`courses/${courseId}/assignments`, 'GET'),     // Fetch all assignments in the course
-  canvas.createRequestConfig(`courses/${courseId}/users`, 'GET')            // Fetch all users in the course
+  // Fetch course details
+  canvas.createRequestConfig(`courses/${courseId}`, 'GET'),
+  // Fetch all assignments in the course
+  canvas.createRequestConfig(`courses/${courseId}/assignments`, 'GET'),
+  // Fetch all users in the course
+  canvas.createRequestConfig(`courses/${courseId}/users`, 'GET')
 ];
 
 (async () => {
