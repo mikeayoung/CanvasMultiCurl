@@ -20,10 +20,10 @@ The `getList` function allows you to fetch paginated lists of items from Canvas,
 const CanvasMultiCurl = require('./CanvasMultiCurl');
 const canvas = new CanvasMultiCurl('YOUR_CANVAS_ACCESS_TOKEN', 'https://canvas.your-instance.com');
 
-// Fetch all the courses, 100 at a time
+// Fetch all the courses in root account, 100 at a time
 (async () => {
   try {
-    const courses = await canvas.getList('courses');
+    const courses = await canvas.getList('accounts/1/courses');
     console.log('Courses:', courses);
   } catch (error) {
     console.error('Error fetching courses:', error);
@@ -92,13 +92,13 @@ const updatedData = {
 ### 3. **`getAllResultsFromArray()`** - Fetching Multiple Items in Parallel
 The `getAllResultsFromArray` method allows you to make multiple requests in parallel, which is useful for fetching large datasets more efficiently.
 
-#### Example: Fetch assignments for multiple courses
+#### Example: Fetch assignments for multiple courses in root account
 ```j
 const courseIds = [12345, 67890, 11223]; // Replace with actual course IDs
 
 (async () => {
   try {
-    const allAssignments = await canvas.getAllResultsFromArray('courses/<item>/assignments', courseIds);
+    const allAssignments = await canvas.getAllResultsFromArray('accounts/1/courses/<item>/assignments', courseIds);
     console.log('All assignments:', allAssignments);
   } catch (error) {
     console.error('Error fetching assignments for multiple courses:', error);
