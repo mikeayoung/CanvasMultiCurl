@@ -29,9 +29,9 @@ class CanvasMultiCurl {
     }
 
     // Function to create a request configuration
-    createRequestConfig(url, method = 'GET', data = null, prefix = null) {
+    createRequestConfig(endpoint, method = 'GET', data = null, prefix = null) {
         const config = {
-            url: url,
+            url: `${this.domain}/api/v1/${endpoint}`,
             method: method.toUpperCase(),
             headers: {
                 'Authorization': `Bearer ${this.accessToken}`,
@@ -103,7 +103,7 @@ class CanvasMultiCurl {
         const allResults = [];
         let page = 1;
         const preparedUrl = `${url}${vars ? '&' : '?'}`;
-        const initialUrl = `${this.domain}/api/v1/${preparedUrl}page=${page}&per_page=${perPage}`;
+        const initialUrl = `${preparedUrl}page=${page}&per_page=${perPage}`;
 
         try {
             // Initial request to determine total pages
@@ -176,7 +176,7 @@ class CanvasMultiCurl {
                 const batchRequests = [];
                 if (!nextbookmarkURL) {
                     for (let i = 0; i < maxBatchSize && page <= totalPages; i++, page++) {
-                        const batchUrl = `${this.domain}/api/v1/${preparedUrl}page=${page}&per_page=${perPage}`;
+                        const batchUrl = `${preparedUrl}page=${page}&per_page=${perPage}`;
                         batchRequests.push(this.processRequest(this.createRequestConfig(batchUrl, 'GET'), retryCounts));
                     }
                 } else {
@@ -300,7 +300,7 @@ class CanvasMultiCurl {
 
     // Wrapper function to combine createRequestConfig and makeRequest
     async request(url, method = 'GET', data = null, prefix = null) {
-        const config = this.createRequestConfig(`${this.domain}/api/v1/${url}`, method, data, prefix);
+        const config = this.createRequestConfig(`${url}`, method, data, prefix);
         return this.makeRequest(config);
     }
 
