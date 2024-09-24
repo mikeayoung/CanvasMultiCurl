@@ -1,7 +1,7 @@
 # CanvasMultiCurl
 Node.js library that uses Bottleneck and Axios to handle concurrent calls to Canvas LMS API. Uses backoff delays if it hits 403 throttles and various calculations for efficiency.
 
-Built in the thick of many real-world Canvas tasks. Still very much a work in progress. Not linted. No guarantees that anything will work or won't hopelessly erase all your Canvas data etc. Be adventurous; have fun; etc. Please feel free to make pull requests and improvements as needed. Big thanks to [James Jones](https://community.canvaslms.com/t5/user/viewprofilepage/user-id/105160) for his tips and tricks and help with speculative concurrency.
+Built in the thick of many real-world Canvas tasks. Still very much a work in progress. Not linted. Presumes you're using an admin-level API access token. No guarantees that anything will work or won't hopelessly erase all your Canvas data etc. Be adventurous; have fun; etc. Please feel free to make pull requests and improvements as needed. Big thanks to [James Jones](https://community.canvaslms.com/t5/user/viewprofilepage/user-id/105160) for his tips and tricks and help with speculative concurrency.
 
 ## Notes
 
