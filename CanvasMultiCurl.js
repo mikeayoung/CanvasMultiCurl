@@ -313,6 +313,24 @@ class CanvasMultiCurl {
         }
     }
 
+
+    /*
+    1. getAllResultsFromArray is better suited when handling multiple items,
+       such as fetching assignments for all courses in parallel, to save time and bandwidth.
+
+    2. getAllResultsFromArray automatically manages pagination, making it ideal
+       for retrieving paginated results from multiple courses at once.
+
+    3. This method reduces boilerplate by handling retries, paging, and errors
+       automatically across multiple requests, simplifying the overall implementation.
+
+    4. Built-in concurrency control allows for efficient batch processing
+       while respecting API rate limits, avoiding manual management of simultaneous requests.
+
+    5. This method scales better for large datasets, as it can concurrently process
+       a larger number of items without manual scaling efforts.
+    */
+
     async getAllResultsFromArray(basePattern, items, vars = false, perPage = 100, maxBatchSize = 40, batchDelay = 500) {
         const allResults = {};
         const retryCounts = {};
