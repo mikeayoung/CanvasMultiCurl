@@ -282,11 +282,17 @@ class CanvasMultiCurl {
             return {
                 status: response.status,
                 headers: response.headers,
-                data: response.data
+                data: response.data,
+                config: config
             };
         } catch (error) {
             console.error(`Error during request to ${config.url}: ${error.message}`);
-            return null;
+            return {
+                status: error.response ? error.response.status : null,
+                headers: error.response ? error.response.headers : null,
+                data: error.response ? error.response.data : null,
+                config: config
+            };
         }
     }
 
