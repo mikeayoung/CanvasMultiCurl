@@ -23,7 +23,7 @@ const canvas = new CanvasMultiCurl('YOUR_CANVAS_ACCESS_TOKEN', 'https://canvas.y
 // Fetch all the courses, 100 at a time
 (async () => {
   try {
-    const courses = await canvas.getList('courses', false, 100);
+    const courses = await canvas.getList('courses');
     console.log('Courses:', courses);
   } catch (error) {
     console.error('Error fetching courses:', error);
@@ -36,10 +36,27 @@ const canvas = new CanvasMultiCurl('YOUR_CANVAS_ACCESS_TOKEN', 'https://canvas.y
 const courseId = 12345; // Replace with your course ID
 (async () => {
   try {
-    const assignments = await canvas.getList(`courses/${courseId}/assignments`, false, 100);
+    const assignments = await canvas.getList(`courses/${courseId}/assignments`);
     console.log('Assignments:', assignments);
   } catch (error) {
     console.error('Error fetching assignments:', error);
+  }
+})();
+```
+
+### Example: Fetch assignments in a course filtered by `bucket` and `search_term` parameters
+```j
+const courseId = 12345; // Replace with your course ID
+
+(async () => {
+  try {
+    // Use vars to filter assignments by a specific bucket and search term
+    const vars = `bucket=past&search_term=project`; // Example: Fetch 'past' assignments that include the word 'project'
+
+    const assignments = await canvas.getList(`courses/${courseId}/assignments`, vars);
+    console.log('Filtered assignments:', assignments);
+  } catch (error) {
+    console.error('Error fetching filtered assignments:', error);
   }
 })();
 ```
@@ -81,7 +98,7 @@ const courseIds = [12345, 67890, 11223]; // Replace with actual course IDs
 
 (async () => {
   try {
-    const allAssignments = await canvas.getAllResultsFromArray('courses/<item>/assignments', courseIds, false, 100);
+    const allAssignments = await canvas.getAllResultsFromArray('courses/<item>/assignments', courseIds);
     console.log('All assignments:', allAssignments);
   } catch (error) {
     console.error('Error fetching assignments for multiple courses:', error);
