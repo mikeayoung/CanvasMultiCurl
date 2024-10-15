@@ -50,28 +50,35 @@ class CanvasMultiCurl {
 
     // Function to process a single request, with error handling and retry logic
     processRequest(config, retryCounts) {
-        // Return the scheduled request as a promise
         return this.limiter.schedule(() => this.makeRequest(config))
             .then(response => {
-                // Handle the response, especially checking for rate limits
                 if (response && response.status === 403) {
-                    // Rate limit reached, calculate retry delay
-                    const retryDelay = this.calculateRetryDelay(response.headers);
-                    console.error(`Rate limit reached, retrying ${config.url} in ${retryDelay} milliseconds...`);
+                    const isRateLimitError = response.data && response.data.includes('Rate Limit Exceeded');
 
-                    // Increment retry count
-                    retryCounts[config.url] = (retryCounts[config.url] || 0) + 1;
+                    if (isRateLimitError) {
+                        // Rate limit reached, calculate retry delay
+                        const retryDelay = this.calculateRetryDelay(response.headers);
+                        console.error(`Rate limit reached, retrying ${config.url} in ${retryDelay} milliseconds...`);
 
-                    if (retryCounts[config.url] <= 5) {
-                        // Delay the retry and then recursively call processRequest
-                        return new Promise(resolve => setTimeout(resolve, retryDelay))
-                            .then(() => this.processRequest(config, retryCounts)); // Retry the request
+                        // Increment retry count
+                        retryCounts[config.url] = (retryCounts[config.url] || 0) + 1;
+
+                        if (retryCounts[config.url] <= 5) {
+                            // Delay the retry and then recursively call processRequest
+                            return new Promise(resolve => setTimeout(resolve, retryDelay))
+                                .then(() => this.processRequest(config, retryCounts)); // Retry the request
+                        } else {
+                            console.error(`Exceeded retry limit for ${config.url}`);
+                            return null;
+                        }
                     } else {
-                        console.error(`Exceeded retry limit for ${config.url}`);
+                        // Handle other 403 errors (non-rate-limit-related)
+                        const errorMessage = response.data ? response.data.error : `403 Forbidden error for ${config.url}`;
+                        console.error(`403 Forbidden error (non-rate-limit) for ${config.url}:`, errorMessage);
                         return null;
                     }
                 }
-                // If no rate limit issues, return the successful response
+                // If no rate limit or 403 issues, return the successful response
                 return response;
             })
             .catch(error => {
