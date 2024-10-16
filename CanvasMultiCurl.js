@@ -53,7 +53,10 @@ class CanvasMultiCurl {
         return this.limiter.schedule(() => this.makeRequest(config))
             .then(response => {
                 if (response && response.status === 403) {
-                    const isRateLimitError = response.data && response.data.includes('Rate Limit Exceeded');
+                    const isRateLimitError = response.data &&
+                      ((typeof response.data === 'string' && response.data.includes('Rate Limit Exceeded')) ||
+                      (typeof response.data === 'object' && JSON.stringify(response.data).includes('Rate Limit Exceeded')));
+
 
                     if (isRateLimitError) {
                         // Rate limit reached, calculate retry delay
