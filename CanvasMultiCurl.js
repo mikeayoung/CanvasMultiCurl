@@ -463,7 +463,7 @@ class CanvasMultiCurl {
                               } else {
                                 //ugh bookmarks
                                 totalPages[item]++;
-                                const pageConfig = this.createRequestConfig(nextPageUrl, 'GET');
+                                const pageConfig = this.createRequestConfig(nextPageUrl, 'GET', null, null, true);
                                 currentBatch.push(pageConfig);
                               }
                           }
