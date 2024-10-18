@@ -29,9 +29,9 @@ class CanvasMultiCurl {
     }
 
     // Function to create a request configuration
-    createRequestConfig(endpoint, method = 'GET', data = null, prefix = null) {
+    createRequestConfig(endpoint, method = 'GET', data = null, prefix = null, bookmark = false) {
         const config = {
-            url: `${this.domain}/api/v1/${endpoint}`,
+            url: (bookmark) ? `${endpoint}` : `${this.domain}/api/v1/${endpoint}`,
             method: method.toUpperCase(),
             headers: {
                 'Authorization': `Bearer ${this.accessToken}`,
@@ -190,7 +190,7 @@ class CanvasMultiCurl {
                         batchRequests.push(this.processRequest(this.createRequestConfig(batchUrl, 'GET'), retryCounts));
                     }
                 } else {
-                    batchRequests.push(this.processRequest(this.createRequestConfig(nextbookmarkURL, 'GET'), retryCounts));
+                    batchRequests.push(this.processRequest(this.createRequestConfig(nextbookmarkURL, 'GET', null, null, true), retryCounts));
                     page++;
                 }
 
