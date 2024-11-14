@@ -169,7 +169,7 @@ class CanvasMultiCurl {
                   } else {
                     //if no, it's time to start speculative concurrency!
           					//we can start conservatively by making 2 concurrent calls and ramp up exponentially
-                    totalPages = nextPage + 1;
+                    totalPages = parseInt(nextPage) + 1;
                   }
                 }
             }
@@ -183,6 +183,7 @@ class CanvasMultiCurl {
             // if we keep going, there is more than 1 page, so let's start on page 2
             page = 2;
             while (page <= totalPages || Object.keys(retryCounts).length > 0) {
+                let alreadyIncreased = false;
                 const batchRequests = [];
                 if (!nextbookmarkURL) {
                     for (let i = 0; i < maxBatchSize && page <= totalPages; i++, page++) {
@@ -227,9 +228,12 @@ class CanvasMultiCurl {
                                 totalPages = parseInt(queryParams.get('page'));
                                 lastPageKnown = true;
                               } //if the last page is a bookmark, the next page will be too
-                          } else {
+                          }
+                          if(!lastPageKnown)
+                          {
                             const nextPageUrl = this.getPageUrl(response.headers['link'], 'next');
-                            if (!results.length || !nextPageUrl) {
+                            if (!nextPageUrl) {
+                                //no next page means we are done here
                                 totalPages = page - 1;
                                 lastPageKnown = true;
                             } else {
@@ -239,11 +243,22 @@ class CanvasMultiCurl {
                                 {
                                   //ugh it's a bookmark, we must go step by step
                                   nextbookmarkURL = nextPageUrl;
-                                  totalPages++
+                                  totalPages++;
                                 } else {
-                                  totalPages += 10; // Speculative increment
+                                  if(!alreadyIncreased)
+                                  {
+                                    totalPages = parseInt(totalPages * 2); // Speculative increment
+                                    alreadyIncreased = true;
+                                  }
                                 }
                             }
+                          }
+                        } else {
+                          //no results means we're done
+                          if(!results.length)
+                          {
+                            totalPages = page - 1;
+                            lastPageKnown = true;
                           }
                         }
                     }
@@ -426,7 +441,7 @@ class CanvasMultiCurl {
                                 if(currentPageUrl)
                                 {
                                   const cpqueryParams = new URLSearchParams(currentPageUrl.split('?')[1]);
-                                  currentPage = cpqueryParams.get('page');
+                                  currentPage = parseInt(cpqueryParams.get('page'));
                                 }
 
                                 for (let page = currentPage; page <= totalPages[item]; page++) {
@@ -452,7 +467,7 @@ class CanvasMultiCurl {
 
                                   if(currentPage > totalPages[item])
                                   {
-                                    totalPages[item] = totalPages[item] + 10;
+                                    totalPages[item] = totalPages[item] + 1;
 
                                     for (let page = currentPage + 1; page <= totalPages[item]; page++) {
                                         const pageUrl = `${templateUrl.replace('<item>', item)}page=${page}`;
@@ -479,6 +494,31 @@ class CanvasMultiCurl {
         }
 
         return allResults;
+    }
+
+    // Add this method to the CanvasMultiCurl class
+    async gradeItem(courseId, userId, assignmentId, gradeVal) {
+        const endpoint = `courses/${courseId}/assignments/${assignmentId}/submissions/update_grades`;
+        const gradeData = {
+            [`grade_data[${userId}][posted_grade]`]: gradeVal
+        };
+
+        // Create a POST request configuration
+        const config = this.createRequestConfig(endpoint, 'POST', gradeData);
+
+        // Process the request and handle any response or errors
+        try {
+            const response = await this.processRequest(config, {});
+            if (response && response.status === 200) {
+                return response.data; // Return successful response data
+            } else {
+                console.error(`Failed to post grade for user ${userId} in course ${courseId}`);
+                return null;
+            }
+        } catch (error) {
+            console.error(`Error in gradeItem: ${error.message}`);
+            return null;
+        }
     }
 }
 
