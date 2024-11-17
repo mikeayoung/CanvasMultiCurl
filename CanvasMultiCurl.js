@@ -247,7 +247,7 @@ class CanvasMultiCurl {
                                 } else {
                                   if(!alreadyIncreased)
                                   {
-                                    totalPages = parseInt(totalPages * 2); // Speculative increment
+                                    totalPages = totalPages + 10; // Speculative increment
                                     alreadyIncreased = true;
                                   }
                                 }
