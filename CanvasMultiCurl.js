@@ -339,7 +339,7 @@ class CanvasMultiCurl {
         }
 
         if (!students) {
-            return this.getList(`courses/${courseid}/students/submissions?${assignmentList}`);
+            return this.getList(`courses/${courseid}/students/submissions?${assignmentList}`, true);
         } else {
             const buildlist = students.reduce((acc, student) => acc + `&student_ids[]=${student}`, '');
             return this.getList(`courses/${courseid}/students/submissions?${assignmentList}${buildlist}`, true);
