@@ -411,7 +411,7 @@ class CanvasMultiCurl {
                 for (const result of batchResults) {
                     if (result && result.status === 200) {
                         const itemUrl = result.config.url;
-                        const item = items.find(it => itemUrl.includes(it));
+                        const item = items.find(it => itemUrl.includes(`/${it}/`));
                         const currentResults = allResults[item] || [];
 
                         if (Array.isArray(result.data)) {
