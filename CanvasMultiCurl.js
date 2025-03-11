@@ -85,7 +85,7 @@ class CanvasMultiCurl {
                 return response;
             })
             .catch(error => {
-                console.error(`Error during request to ${config.url}: ${error.message}`);
+                console.error(`${error.response.status} error during request to ${config.url}: ${error.response.data.message}`);
                 return null;
             });
     }
@@ -313,7 +313,7 @@ class CanvasMultiCurl {
                 config: config
             };
         } catch (error) {
-            console.error(`Error during request to ${config.url}: ${error.message}`);
+            console.error(`${error.response.status} error during request to ${config.url}: ${error.response.data.message}`);
             return {
                 status: error.response ? error.response.status : null,
                 headers: error.response ? error.response.headers : null,
@@ -445,7 +445,8 @@ class CanvasMultiCurl {
                                 }
 
                                 for (let page = currentPage; page <= totalPages[item]; page++) {
-                                    const pageUrl = `${templateUrl.replace('<item>', item)}page=${page}`;
+                                    const pageUrl = `${templateUrl.replace('<item>', item)}&page=${page}`;
+                                    console.log(pageUrl);
                                     const pageConfig = this.createRequestConfig(pageUrl, 'GET');
                                     currentBatch.push(pageConfig);
                                 }
@@ -470,7 +471,7 @@ class CanvasMultiCurl {
                                     totalPages[item] = totalPages[item] + 1;
 
                                     for (let page = currentPage + 1; page <= totalPages[item]; page++) {
-                                        const pageUrl = `${templateUrl.replace('<item>', item)}page=${page}`;
+                                        const pageUrl = `${templateUrl.replace('<item>', item)}&page=${page}`;
                                         const pageConfig = this.createRequestConfig(pageUrl, 'GET');
                                         currentBatch.push(pageConfig);
                                     }
