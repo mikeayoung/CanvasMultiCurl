@@ -501,7 +501,9 @@ class CanvasMultiCurl {
     async gradeItem(courseId, userId, assignmentId, gradeVal) {
         const endpoint = `courses/${courseId}/assignments/${assignmentId}/submissions/update_grades`;
         const gradeData = {
-            [`grade_data[${userId}][posted_grade]`]: gradeVal
+            grade_data: {
+                [userId]: { posted_grade: gradeVal }
+            }
         };
 
         // Create a POST request configuration
